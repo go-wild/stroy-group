@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Строительство домов и бань</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+scroll-behavior:smooth;
+}
+
+body{
+font-family:'Montserrat',sans-serif;
+background:#f4f4f4;
+color:#1d1d1d;
+overflow-x:hidden;
+}
+
+.container{
+width:100%;
+max-width:1280px;
+padding:0 20px;
+margin:0 auto;
+}
+
+header{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+z-index:999;
+background:rgba(10,10,10,0.9);
+backdrop-filter:blur(10px);
+border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.header-inner{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:18px 0;
+}
+
+.logo{
+font-size:28px;
+font-weight:800;
+color:#fff;
+letter-spacing:1px;
+}
+
+nav{
+display:flex;
+gap:35px;
+}
+
+nav a{
+color:#fff;
+text-decoration:none;
+font-size:15px;
+font-weight:500;
+transition:.3s;
+position:relative;
+}
+
+nav a:after{
+content:'';
+position:absolute;
+bottom:-6px;
+left:0;
+width:0;
+height:2px;
+background:#d5a05d;
+transition:.3s;
+}
+
+nav a:hover:after{
+width:100%;
+}
+
+.phone-btn{
+padding:12px 24px;
+border-radius:50px;
+background:#d5a05d;
+color:#fff;
+text-decoration:none;
+font-weight:600;
+transition:.3s;
+}
+
+.phone-btn:hover{
+transform:translateY(-2px);
+}
+
+.hero{
+min-height:100vh;
+background:
+linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
+url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1974&auto=format&fit=crop');
+background-size:cover;
+background-position:center;
+display:flex;
+align-items:center;
+color:#fff;
+position:relative;
+}
+
+.hero-content{
+max-width:780px;
+padding-top:100px;
+}
+
+.hero-sub{
+font-size:14px;
+letter-spacing:3px;
+text-transform:uppercase;
+margin-bottom:25px;
+color:#d5a05d;
+}
+
+.hero h1{
+font-size:72px;
+line-height:1.05;
+margin-bottom:30px;
+font-weight:800;
+}
+
+.hero p{
+font-size:20px;
+line-height:1.7;
+margin-bottom:45px;
+max-width:650px;
+color:#e4e4e4;
+}
+
+.hero-buttons{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.btn{
+padding:18px 36px;
+border-radius:60px;
+text-decoration:none;
+font-weight:600;
+transition:.35s;
+display:inline-flex;
+align-items:center;
+gap:12px;
+}
+
+.btn-main{
+background:#d5a05d;
+color:#fff;
+box-shadow:0 10px 30px rgba(213,160,93,.35);
+}
+
+.btn-main:hover{
+transform:translateY(-4px);
+}
+
+.btn-outline{
+border:1px solid rgba(255,255,255,.4);
+color:#fff;
+}
+
+.btn-outline:hover{
+background:#fff;
+color:#000;
+}
+
+section{
+padding:120px 0;
+}
+
+.section-title{
+font-size:54px;
+font-weight:800;
+text-align:center;
+margin-bottom:70px;
+}
+
+.services-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:30px;
+}
+
+.service-card{
+background:#fff;
+padding:45px 35px;
+border-radius:28px;
+box-shadow:0 10px 40px rgba(0,0,0,0.06);
+transition:.35s;
+position:relative;
+overflow:hidden;
+}
+
+.service-card:before{
+content:'';
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:5px;
+background:#d5a05d;
+}
+
+.service-card:hover{
+transform:translateY(-10px);
+}
+
+.service-icon{
+width:75px;
+height:75px;
+border-radius:20px;
+background:#f6f1ea;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:30px;
+color:#d5a05d;
+margin-bottom:25px;
+}
+
+.service-card h3{
+font-size:25px;
+margin-bottom:15px;
+}
+
+.service-card p{
+color:#666;
+line-height:1.7;
+}
+
+.dark-section{
+background:#121212;
+color:#fff;
+}
+
+.steps-grid{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:25px;
+}
+
+.step{
+background:#1f1f1f;
+padding:40px 25px;
+border-radius:24px;
+text-align:center;
+transition:.35s;
+}
+
+.step:hover{
+transform:translateY(-8px);
+}
+
+.step-number{
+font-size:60px;
+font-weight:800;
+color:#d5a05d;
+margin-bottom:15px;
+}
+
+.step h3{
+font-size:22px;
+margin-bottom:12px;
+}
+
+.step p{
+color:#bdbdbd;
+font-size:14px;
+line-height:1.6;
+}
+
+.advantages-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:30px;
+}
+
+.advantage{
+background:#fff;
+padding:40px;
+border-radius:26px;
+display:flex;
+gap:25px;
+box-shadow:0 10px 35px rgba(0,0,0,.05);
+}
+
+.advantage-icon{
+min-width:70px;
+height:70px;
+border-radius:18px;
+background:#f6f1ea;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+color:#d5a05d;
+}
+
+.advantage h3{
+margin-bottom:12px;
+font-size:24px;
+}
+
+.gallery-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+}
+
+.gallery-grid img{
+width:100%;
+height:320px;
+object-fit:cover;
+border-radius:24px;
+transition:.4s;
+cursor:pointer;
+}
+
+.gallery-grid img:hover{
+transform:scale(1.03);
+}
+
+.contact-section{
+background:
+linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.75)),
+url('photo4.jpg');
+background-size:cover;
+background-position:center;
+text-align:center;
+color:#fff;
+}
+
+.contact-box{
+max-width:850px;
+margin:auto;
+}
+
+.contact-box p{
+font-size:20px;
+line-height:1.8;
+margin-bottom:35px;
+color:#ddd;
+}
+
+.contact-buttons{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+}
+
+footer{
+background:#0a0a0a;
+padding:35px 20px;
+text-align:center;
+color:#888;
+}
+
+.scroll-top{
+position:fixed;
+right:30px;
+bottom:30px;
+width:58px;
+height:58px;
+border-radius:50%;
+background:#d5a05d;
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:22px;
+cursor:pointer;
+box-shadow:0 10px 30px rgba(0,0,0,.3);
+z-index:999;
+transition:.3s;
+}
+
+.scroll-top:hover{
+transform:translateY(-5px);
+}
+
+.call-btn{
+position:fixed;
+right:30px;
+bottom:105px;
+width:68px;
+height:68px;
+border-radius:50%;
+background:#25D366;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+color:#fff;
+text-decoration:none;
+box-shadow:0 0 0 rgba(37,211,102,.4);
+animation:pulse 2s infinite;
+z-index:999;
+}
+
+@keyframes pulse{
+0%{
+box-shadow:0 0 0 0 rgba(37,211,102,.6);
+}
+70%{
+box-shadow:0 0 0 20px rgba(37,211,102,0);
+}
+100%{
+box-shadow:0 0 0 0 rgba(37,211,102,0);
+}
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.75);
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:10000;
+}
+
+.modal-content{
+background:#fff;
+padding:50px;
+border-radius:28px;
+max-width:500px;
+width:100%;
+position:relative;
+}
+
+.close-modal{
+position:absolute;
+right:20px;
+top:20px;
+font-size:24px;
+cursor:pointer;
+}
+
+.modal-content h3{
+font-size:34px;
+margin-bottom:20px;
+}
+
+.modal-content input,
+.modal-content textarea{
+width:100%;
+padding:18px;
+border-radius:14px;
+border:1px solid #ddd;
+margin-bottom:15px;
+font-family:inherit;
+}
+
+.modal-content button{
+width:100%;
+padding:18px;
+border:none;
+background:#d5a05d;
+color:#fff;
+border-radius:50px;
+font-weight:700;
+cursor:pointer;
+}
+
+@media(max-width:1100px){
+.services-grid,
+.gallery-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.steps-grid{
+grid-template-columns:repeat(2,1fr);
+}
+}
+
+/* BURGER MENU */
+
+.burger{
+display:none;
+font-size:28px;
+color:#fff;
+cursor:pointer;
+}
+
+.mobile-menu{
+position:fixed;
+top:0;
+right:-100%;
+width:320px;
+height:100vh;
+background:#121212;
+z-index:10001;
+padding:120px 40px;
+transition:.4s;
+display:flex;
+flex-direction:column;
+gap:30px;
+}
+
+.mobile-menu.active{
+right:0;
+}
+
+.mobile-menu a{
+color:#fff;
+text-decoration:none;
+font-size:22px;
+font-weight:600;
+}
+
+.mobile-close{
+position:absolute;
+top:30px;
+right:30px;
+font-size:28px;
+color:#fff;
+cursor:pointer;
+}
+
+.reviews-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+}
+
+.review-card{
+background:#fff;
+padding:35px;
+border-radius:24px;
+box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+
+.review-stars{
+color:#d5a05d;
+margin-bottom:20px;
+font-size:18px;
+}
+
+.review-card p{
+line-height:1.7;
+color:#666;
+margin-bottom:20px;
+}
+
+.review-card h4{
+font-size:18px;
+}
+
+@media(max-width:768px){
+
+nav{
+display:none;
+}
+
+.burger{
+display:block;
+}
+
+.hero h1{
+font-size:44px;
+}
+
+.hero p{
+font-size:17px;
+}
+
+.section-title{
+font-size:38px;
+}
+
+.services-grid,
+.gallery-grid,
+.advantages-grid,
+.steps-grid{
+grid-template-columns:1fr;
+}
+
+.service-card,
+.advantage,
+.step{
+padding:30px;
+}
+
+.call-btn{
+right:20px;
+bottom:90px;
+}
+
+.scroll-top{
+right:20px;
+bottom:20px;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<header>
+<div class="container header-inner">
+<div class="logo">STROY GROUP</div>
+
+<div class="burger" id="burger">
+<i class="fa-solid fa-bars"></i>
+</div>
+
+<nav>
+<a href="#services">Услуги</a>
+<a href="#steps">Этапы</a>
+<a href="#advantages">Преимущества</a>
+<a href="#gallery">Работы</a>
+<a href="#contacts">Контакты</a>
+</nav>
+
+<a href="#" class="phone-btn open-modal">
+<i class="fa-solid fa-phone"></i>
+Получить консультацию
+</a>
+</div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+<div class="mobile-close" id="mobileClose">
+<i class="fa-solid fa-xmark"></i>
+</div>
+
+<a href="#services">Услуги</a>
+<a href="#steps">Этапы</a>
+<a href="#advantages">Преимущества</a>
+<a href="#gallery">Наши работы</a>
+<a href="#contacts">Контакты</a>
+</div>
+
+<section class="hero">
+<div class="container">
+<div class="hero-content" data-aos="fade-up">
+<div class="hero-sub">Строительство под ключ</div>
+
+<h1>
+Строим дома, бани и гаражи с гарантией качества
+</h1>
+
+<p>
+Работаем с Вашим материалом или предложим собственные варианты. Поэтапная оплата после приемки каждого этапа работ.
+</p>
+
+<div class="hero-buttons">
+<a href="#" class="btn btn-main open-modal">
+<i class="fa-solid fa-phone"></i>
+Оставить заявку
+</a>
+
+<a href="#services" class="btn btn-outline">
+<i class="fa-solid fa-arrow-down"></i>
+Наши услуги
+</a>
+</div>
+</div>
+</div>
+</section>
+
+<section id="services">
+<div class="container">
+<h2 class="section-title" data-aos="fade-up">Наши услуги</h2>
+
+<div class="services-grid">
+
+<div class="service-card" data-aos="fade-up">
+<div class="service-icon"><i class="fa-solid fa-house"></i></div>
+<h3>Строительство домов</h3>
+<p>Полное строительство домов под ключ с соблюдением сроков и этапов.</p>
+</div>
+
+<div class="service-card" data-aos="fade-up" data-aos-delay="100">
+<div class="service-icon"><i class="fa-solid fa-warehouse"></i></div>
+<h3>Гаражи и бани</h3>
+<p>Строим надежные гаражи и бани любой сложности.</p>
+</div>
+
+<div class="service-card" data-aos="fade-up" data-aos-delay="200">
+<div class="service-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+<h3>Достройка домов</h3>
+<p>Достраиваем, расширяем и реконструируем объекты.</p>
+</div>
+
+<div class="service-card" data-aos="fade-up">
+<div class="service-icon"><i class="fa-solid fa-trowel-bricks"></i></div>
+<h3>Бетонные работы</h3>
+<p>Фундаменты, опалубка, монолитные конструкции и площадки.</p>
+</div>
+
+<div class="service-card" data-aos="fade-up" data-aos-delay="100">
+<div class="service-icon"><i class="fa-solid fa-bolt"></i></div>
+<h3>Электромонтаж</h3>
+<p>Профессиональный монтаж электрики и освещения.</p>
+</div>
+
+<div class="service-card" data-aos="fade-up" data-aos-delay="200">
+<div class="service-icon"><i class="fa-solid fa-faucet-drip"></i></div>
+<h3>Водоснабжение</h3>
+<p>Монтаж систем водоснабжения и канализации.</p>
+</div>
+
+</div>
+</div>
+</section>
+
+<section class="dark-section" id="steps">
+<div class="container">
+<h2 class="section-title" data-aos="fade-up">Как мы работаем</h2>
+
+<div class="steps-grid">
+
+<div class="step" data-aos="zoom-in">
+<div class="step-number">01</div>
+<h3>Заявка</h3>
+<p>Оставляете заявку или звоните нам.</p>
+</div>
+
+<div class="step" data-aos="zoom-in" data-aos-delay="100">
+<div class="step-number">02</div>
+<h3>Консультация</h3>
+<p>Обсуждаем детали и пожелания.</p>
+</div>
+
+<div class="step" data-aos="zoom-in" data-aos-delay="200">
+<div class="step-number">03</div>
+<h3>Смета</h3>
+<p>Подготавливаем прозрачную смету.</p>
+</div>
+
+<div class="step" data-aos="zoom-in" data-aos-delay="300">
+<div class="step-number">04</div>
+<h3>Строительство</h3>
+<p>Выполняем этапы работ по договоренности.</p>
+</div>
+
+<div class="step" data-aos="zoom-in" data-aos-delay="400">
+<div class="step-number">05</div>
+<h3>Приемка</h3>
+<p>Вы принимаете этап и только после этого оплачиваете.</p>
+</div>
+
+</div>
+</div>
+</section>
+
+<section id="advantages">
+<div class="container">
+<h2 class="section-title" data-aos="fade-up">Почему выбирают нас</h2>
+
+<div class="advantages-grid">
+
+<div class="advantage" data-aos="fade-right">
+<div class="advantage-icon"><i class="fa-solid fa-wallet"></i></div>
+<div>
+<h3>Поэтапная оплата</h3>
+<p>Никаких скрытых платежей — оплата только после приемки работ.</p>
+</div>
+</div>
+
+<div class="advantage" data-aos="fade-left">
+<div class="advantage-icon"><i class="fa-solid fa-medal"></i></div>
+<div>
+<h3>Качественные материалы</h3>
+<p>Работаем как с вашим материалом, так и предлагаем свои решения.</p>
+</div>
+</div>
+
+<div class="advantage" data-aos="fade-right">
+<div class="advantage-icon"><i class="fa-solid fa-comments"></i></div>
+<div>
+<h3>Бесплатная консультация</h3>
+<p>Помогаем подобрать лучший вариант под ваш бюджет.</p>
+</div>
+</div>
+
+<div class="advantage" data-aos="fade-left">
+<div class="advantage-icon"><i class="fa-solid fa-clock"></i></div>
+<div>
+<h3>Соблюдение сроков</h3>
+<p>Работаем по согласованному графику и этапам.</p>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+
+<section id="gallery">
+<div class="container">
+<h2 class="section-title" data-aos="fade-up">Наши работы</h2>
+
+<div class="gallery-grid">
+<img src="photo1.jpg" data-aos="zoom-in" alt="Строительство дома">
+<img src="photo2.jpg" data-aos="zoom-in" data-aos-delay="100" alt="Строительство гаража">
+<img src="photo3.jpg" data-aos="zoom-in" data-aos-delay="200" alt="Строительство дома">
+</div>
+</div>
+</section>
+
+<section id="reviews">
+<div class="container">
+<h2 class="section-title" data-aos="fade-up">Отзывы клиентов</h2>
+
+<div class="reviews-grid">
+
+<div class="review-card" data-aos="fade-up">
+<div class="review-stars">
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+</div>
+
+<p>
+Построили баню быстро и качественно. Все этапы согласовывались, никаких скрытых платежей.
+</p>
+
+<h4>Александр</h4>
+</div>
+
+<div class="review-card" data-aos="fade-up" data-aos-delay="100">
+<div class="review-stars">
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+</div>
+
+<p>
+Достроили дом после другой бригады. Сделали аккуратно и в срок.
+</p>
+
+<h4>Игорь</h4>
+</div>
+
+<div class="review-card" data-aos="fade-up" data-aos-delay="200">
+<div class="review-stars">
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-star"></i>
+</div>
+
+<p>
+Очень понравился подход — оплата только после приемки этапов.
+</p>
+
+<h4>Михаил</h4>
+</div>
+
+</div>
+</div>
+</section>
+
+<section class="contact-section" id="contacts">
+<div class="container">
+<div class="contact-box" data-aos="fade-up">
+<h2 class="section-title">Свяжитесь с нами</h2>
+
+<p>
+Звоните или пишите — максимально подробно ответим на все вопросы и бесплатно проконсультируем.
+</p>
+
+<div class="contact-buttons">
+<a href="#" class="btn btn-main open-modal">
+<i class="fa-solid fa-phone"></i>
+Заказать звонок
+</a>
+
+<a href="#" class="btn btn-outline">
+<i class="fa-brands fa-whatsapp"></i>
+WhatsApp
+</a>
+</div>
+</div>
+</div>
+</section>
+
+<footer>
+© 2026 STROY GROUP. Все права защищены.
+</footer>
+
+<a href="#" class="call-btn">
+<i class="fa-solid fa-phone"></i>
+</a>
+
+<div class="scroll-top" id="scrollTop">
+<i class="fa-solid fa-arrow-up"></i>
+</div>
+
+<div class="modal" id="modal">
+<div class="modal-content">
+<div class="close-modal" id="closeModal">
+<i class="fa-solid fa-xmark"></i>
+</div>
+
+<h3>Оставить заявку</h3>
+
+<input type="text" placeholder="Ваше имя">
+<input type="tel" placeholder="Телефон">
+<textarea rows="4" placeholder="Комментарий"></textarea>
+
+<button>
+Отправить заявку
+</button>
+</div>
+</div>
+
+<script>
+
+AOS.init({
+duration:1000,
+once:true
+});
+
+const scrollBtn = document.getElementById('scrollTop');
+
+scrollBtn.addEventListener('click',()=>{
+window.scrollTo({
+top:0,
+behavior:'smooth'
+})
+});
+
+const modal = document.getElementById('modal');
+const openBtns = document.querySelectorAll('.open-modal');
+const closeModal = document.getElementById('closeModal');
+
+openBtns.forEach(btn=>{
+btn.addEventListener('click',(e)=>{
+e.preventDefault();
+modal.style.display='flex';
+});
+});
+
+closeModal.addEventListener('click',()=>{
+modal.style.display='none';
+});
+
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileClose = document.getElementById('mobileClose');
+
+burger.addEventListener('click',()=>{
+mobileMenu.classList.add('active');
+});
+
+mobileClose.addEventListener('click',()=>{
+mobileMenu.classList.remove('active');
+});
+
+window.addEventListener('click',(e)=>{
+if(e.target === modal){
+modal.style.display='none';
+}
+});
+
+
+// Sticky header shadow
+window.addEventListener('scroll',()=>{
+const header = document.querySelector('header');
+
+if(window.scrollY > 40){
+header.style.boxShadow = '0 10px 30px rgba(0,0,0,.25)';
+}else{
+header.style.boxShadow = 'none';
+}
+});
+
+// Reveal scroll button
+window.addEventListener('scroll',()=>{
+if(window.scrollY > 300){
+scrollBtn.style.opacity = '1';
+scrollBtn.style.visibility = 'visible';
+}else{
+scrollBtn.style.opacity = '0';
+scrollBtn.style.visibility = 'hidden';
+}
+});
+
+</script>
+
+</body>
+</html>
