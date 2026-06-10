@@ -352,7 +352,6 @@
         <button type="submit">Отправить заявку</button>
         <output class="form-status" id="formStatus" aria-live="polite"></output>
       </form>
-      <iframe class="lead-submit-frame" id="leadSubmitFrame" name="leadSubmitFrame" title="Отправка заявки"></iframe>
     </div>
   </div>
 
@@ -372,12 +371,7 @@
     const leadForm = document.getElementById('leadForm');
     const formStatus = document.getElementById('formStatus');
     const submitButton = leadForm.querySelector('button[type="submit"]');
-    const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeSbZxDNz__PSksFAWI6O-71vX0bBJ25R0-rUhbiBHh8reiQQ/formResponse';
-    const GOOGLE_FORM_FIELDS = {
-      name: 'entry.342911657',
-      phone: 'entry.74422937',
-      message: 'entry.1122595690'
-    };
+    const LEAD_ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbwk2H7KXklx-Z3hX7bVey7XDtdvpdXrbzJA-J7x3XPPfD7brN4TjyzBw4v4X6op_61p/exec';
 
     function setMenu(open) {
       body.classList.toggle('menu-open', open);
@@ -453,63 +447,25 @@
       return String(formData.get(key) || '').trim();
     }
 
-    function buildGoogleFormBody(formData) {
-      const body = new URLSearchParams();
-      const message = getLeadValue(formData, 'message');
-      const details = [
-        message || 'Без комментария',
-        '',
-        `Страница: ${window.location.href}`,
-        `Дата: ${new Date().toLocaleString('ru-RU')}`
-      ].join('\n');
-
-      body.set(GOOGLE_FORM_FIELDS.name, getLeadValue(formData, 'name'));
-      body.set(GOOGLE_FORM_FIELDS.phone, getLeadValue(formData, 'phone'));
-      body.set(GOOGLE_FORM_FIELDS.message, details);
-
-      return body;
-    }
-
-    function submitLeadViaFrame(body) {
-      const shadowForm = document.createElement('form');
-      shadowForm.action = GOOGLE_FORM_ACTION;
-      shadowForm.method = 'POST';
-      shadowForm.target = 'leadSubmitFrame';
-      shadowForm.style.display = 'none';
-
-      body.forEach((value, key) => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = value;
-        shadowForm.appendChild(input);
-      });
-
-      document.body.appendChild(shadowForm);
-      shadowForm.submit();
-      window.setTimeout(() => shadowForm.remove(), 1200);
+    function buildLeadPayload(formData) {
+      return {
+        name: getLeadValue(formData, 'name'),
+        phone: getLeadValue(formData, 'phone'),
+        message: getLeadValue(formData, 'message') || 'Без комментария',
+        page: window.location.href,
+        createdAt: new Date().toISOString()
+      };
     }
 
     async function sendLead(formData) {
-      const body = buildGoogleFormBody(formData);
-
-      if (!window.fetch) {
-        submitLeadViaFrame(body);
-        return;
-      }
-
-      try {
-        await fetch(GOOGLE_FORM_ACTION, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-          },
-          body
-        });
-      } catch (error) {
-        submitLeadViaFrame(body);
-      }
+      await fetch(LEAD_ENDPOINT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(buildLeadPayload(formData))
+      });
     }
 
     leadForm.addEventListener('submit', async (event) => {
@@ -1421,13 +1377,6 @@
 
     .form-status.error {
       color: #b3261e;
-    }
-
-    .lead-submit-frame {
-      display: none;
-      width: 0;
-      height: 0;
-      border: 0;
     }
 
     @media (max-width: 1120px) {
