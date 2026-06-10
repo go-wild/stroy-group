@@ -352,6 +352,7 @@
         <button type="submit">Отправить заявку</button>
         <output class="form-status" id="formStatus" aria-live="polite"></output>
       </form>
+      <iframe class="lead-submit-frame" id="leadSubmitFrame" name="leadSubmitFrame" title="Отправка заявки"></iframe>
     </div>
   </div>
 
@@ -371,9 +372,12 @@
     const leadForm = document.getElementById('leadForm');
     const formStatus = document.getElementById('formStatus');
     const submitButton = leadForm.querySelector('button[type="submit"]');
-    const TELEGRAM_BOT_TOKEN = '8852684042:AAHL4l-7vRjGKYauFo_nMavqJx6n33cDuXw';
-    const TELEGRAM_CHAT_ID = '635353041';
-    const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
+    const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeSbZxDNz__PSksFAWI6O-71vX0bBJ25R0-rUhbiBHh8reiQQ/formResponse';
+    const GOOGLE_FORM_FIELDS = {
+      name: 'entry.342911657',
+      phone: 'entry.74422937',
+      message: 'entry.1122595690'
+    };
 
     function setMenu(open) {
       body.classList.toggle('menu-open', open);
@@ -445,57 +449,67 @@
       formStatus.className = `form-status ${type}`.trim();
     }
 
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+    function getLeadValue(formData, key) {
+      return String(formData.get(key) || '').trim();
     }
 
-    async function resolveTelegramChatId() {
-      return TELEGRAM_CHAT_ID;
-    }
-
-    function buildTelegramMessage(formData) {
-      const name = escapeHtml(formData.get('name') || 'Не указано');
-      const phone = escapeHtml(formData.get('phone') || 'Не указано');
-      const message = escapeHtml(formData.get('message') || 'Без комментария');
-      const page = escapeHtml(window.location.href);
-
-      return [
-        '<b>Новая заявка с сайта ВЕКТОР</b>',
+    function buildGoogleFormBody(formData) {
+      const body = new URLSearchParams();
+      const message = getLeadValue(formData, 'message');
+      const details = [
+        message || 'Без комментария',
         '',
-        `<b>Имя:</b> ${name}`,
-        `<b>Телефон:</b> ${phone}`,
-        `<b>Комментарий:</b> ${message}`,
-        '',
-        `<b>Страница:</b> ${page}`
+        `Страница: ${window.location.href}`,
+        `Дата: ${new Date().toLocaleString('ru-RU')}`
       ].join('\n');
+
+      body.set(GOOGLE_FORM_FIELDS.name, getLeadValue(formData, 'name'));
+      body.set(GOOGLE_FORM_FIELDS.phone, getLeadValue(formData, 'phone'));
+      body.set(GOOGLE_FORM_FIELDS.message, details);
+
+      return body;
     }
 
-    async function sendTelegramLead(formData) {
-      const chatId = await resolveTelegramChatId();
-      const response = await fetch(`${TELEGRAM_API}/sendMessage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: buildTelegramMessage(formData),
-          parse_mode: 'HTML',
-          disable_web_page_preview: true
-        })
-      });
-      const data = await response.json();
+    function submitLeadViaFrame(body) {
+      const shadowForm = document.createElement('form');
+      shadowForm.action = GOOGLE_FORM_ACTION;
+      shadowForm.method = 'POST';
+      shadowForm.target = 'leadSubmitFrame';
+      shadowForm.style.display = 'none';
 
-      if (!response.ok || !data.ok) {
-        throw new Error(data.description || 'Сервис не принял заявку.');
+      body.forEach((value, key) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        shadowForm.appendChild(input);
+      });
+
+      document.body.appendChild(shadowForm);
+      shadowForm.submit();
+      window.setTimeout(() => shadowForm.remove(), 1200);
+    }
+
+    async function sendLead(formData) {
+      const body = buildGoogleFormBody(formData);
+
+      if (!window.fetch) {
+        submitLeadViaFrame(body);
+        return;
       }
 
-      return data;
+      try {
+        await fetch(GOOGLE_FORM_ACTION, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          },
+          body
+        });
+      } catch (error) {
+        submitLeadViaFrame(body);
+      }
     }
 
     leadForm.addEventListener('submit', async (event) => {
@@ -507,7 +521,7 @@
       setFormStatus('Отправляем заявку...');
 
       try {
-        await sendTelegramLead(formData);
+        await sendLead(formData);
         setFormStatus('Заявка отправлена. Скоро мы свяжемся с вами.', 'success');
         leadForm.reset();
       } catch (error) {
@@ -1407,6 +1421,13 @@
 
     .form-status.error {
       color: #b3261e;
+    }
+
+    .lead-submit-frame {
+      display: none;
+      width: 0;
+      height: 0;
+      border: 0;
     }
 
     @media (max-width: 1120px) {
