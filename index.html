@@ -376,7 +376,7 @@
     const formStatus = document.getElementById('formStatus');
     const submitButton = leadForm.querySelector('button[type="submit"]');
     const TELEGRAM_BOT_TOKEN = '8852684042:AAHL4l-7vRjGKYauFo_nMavqJx6n33cDuXw';
-    const TELEGRAM_CHAT_ID = '';
+    const TELEGRAM_CHAT_ID = '635353041';
     const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
 
     function setMenu(open) {
@@ -458,39 +458,8 @@
         .replace(/'/g, '&#039;');
     }
 
-    function pickChatId(update) {
-      return update.message?.chat?.id ||
-        update.edited_message?.chat?.id ||
-        update.channel_post?.chat?.id ||
-        update.callback_query?.message?.chat?.id ||
-        null;
-    }
-
     async function resolveTelegramChatId() {
-      if (TELEGRAM_CHAT_ID) {
-        return TELEGRAM_CHAT_ID;
-      }
-
-      const response = await fetch(`${TELEGRAM_API}/getUpdates?limit=10`);
-      const data = await response.json();
-
-      if (!response.ok || !data.ok) {
-        throw new Error(data.description || 'Не удалось получить чат Telegram.');
-      }
-
-      const updates = Array.isArray(data.result) ? data.result : [];
-      const chatId = updates
-        .map(pickChatId)
-        .filter(Boolean)
-        .pop();
-
-      if (!chatId) {
-        const error = new Error('CHAT_ID_MISSING');
-        error.code = 'CHAT_ID_MISSING';
-        throw error;
-      }
-
-      return chatId;
+      return TELEGRAM_CHAT_ID;
     }
 
     function buildTelegramMessage(formData) {
@@ -527,7 +496,7 @@
       const data = await response.json();
 
       if (!response.ok || !data.ok) {
-        throw new Error(data.description || 'Telegram не принял заявку.');
+        throw new Error(data.description || 'Сервис не принял заявку.');
       }
 
       return data;
@@ -539,18 +508,14 @@
 
       submitButton.disabled = true;
       submitButton.textContent = 'Отправляем...';
-      setFormStatus('Отправляем заявку в Telegram...');
+      setFormStatus('Отправляем заявку...');
 
       try {
         await sendTelegramLead(formData);
         setFormStatus('Заявка отправлена. Скоро мы свяжемся с вами.', 'success');
         leadForm.reset();
       } catch (error) {
-        if (error.code === 'CHAT_ID_MISSING' || error.message === 'CHAT_ID_MISSING') {
-          setFormStatus('Откройте бота @stroy_groupbot, отправьте /start и повторите заявку.', 'error');
-        } else {
-          setFormStatus(`Не удалось отправить заявку: ${error.message}`, 'error');
-        }
+        setFormStatus('Не удалось отправить заявку. Проверьте интернет и попробуйте еще раз.', 'error');
       } finally {
         submitButton.disabled = false;
         submitButton.textContent = 'Отправить заявку';
@@ -567,7 +532,7 @@
         easing: 'ease-out-cubic',
         once: true,
         offset: 80,
-        disable: () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        disable: () => window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth <= 700
       });
     }
   </script>
@@ -597,10 +562,15 @@
     html {
       scroll-behavior: smooth;
       scroll-padding-top: var(--header-height);
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
     }
 
     body {
-      min-width: 320px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
       font-family: 'Montserrat', Arial, sans-serif;
       color: var(--ink);
       background: var(--surface);
@@ -623,6 +593,13 @@
       text-decoration: none;
     }
 
+    main,
+    section,
+    footer {
+      width: 100%;
+      max-width: 100%;
+    }
+
     button,
     input,
     textarea {
@@ -642,6 +619,8 @@
       position: fixed;
       inset: 0 0 auto;
       z-index: 1000;
+      max-width: 100%;
+      overflow: hidden;
       background: rgba(10, 10, 10, 0.88);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(14px);
@@ -659,12 +638,14 @@
       align-items: center;
       justify-content: space-between;
       gap: 24px;
+      min-width: 0;
     }
 
     .logo {
       display: inline-flex;
       align-items: center;
       min-width: 0;
+      flex: 0 1 auto;
       color: #fff;
       font-weight: 800;
       letter-spacing: 0.04em;
@@ -672,6 +653,8 @@
     }
 
     .logo-text {
+      display: block;
+      max-width: min(42vw, 220px);
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: clamp(17px, 2vw, 24px);
@@ -717,6 +700,7 @@
       align-items: center;
       gap: 14px;
       flex: 0 0 auto;
+      min-width: 0;
     }
 
     .phone-btn,
@@ -767,6 +751,9 @@
 
     .hero {
       min-height: 100svh;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
       display: flex;
       align-items: center;
       position: relative;
@@ -1449,6 +1436,10 @@
         display: none;
       }
 
+      .phone-btn {
+        display: none;
+      }
+
       .burger {
         display: grid;
       }
@@ -1468,7 +1459,7 @@
       }
 
       .hero h1 {
-        max-width: 13ch;
+        max-width: 100%;
       }
     }
 
@@ -1478,43 +1469,56 @@
       }
 
       .container {
-        width: min(100% - 32px, 1200px);
+        width: min(100% - 28px, 1200px);
       }
 
       .header-inner {
         gap: 12px;
       }
 
-      .logo-text {
-        font-size: 16px;
+      .logo {
+        max-width: calc(100% - 58px);
       }
 
-      .phone-btn {
-        display: none;
+      .logo-text {
+        max-width: 100%;
+        font-size: 18px;
       }
 
       .hero {
-        min-height: 100svh;
+        min-height: auto;
         align-items: flex-end;
-        padding: calc(var(--header-height) + 34px) 0 calc(env(safe-area-inset-bottom) + 118px);
+        padding: calc(var(--header-height) + 34px) 0 calc(env(safe-area-inset-bottom) + 78px);
         background:
           linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.72)),
-          url("photo5.jpg") center / cover no-repeat;
+          url("photo5.jpg") center top / cover no-repeat;
+      }
+
+      .hero::after {
+        height: 82px;
       }
 
       .hero-content {
         padding-top: 0;
       }
 
+      .hero-sub,
+      .section-kicker {
+        font-size: 11px;
+        letter-spacing: 0.13em;
+      }
+
       .hero h1 {
-        max-width: 12ch;
-        margin-bottom: 18px;
-        font-size: clamp(36px, 11vw, 46px);
+        max-width: 100%;
+        margin-bottom: 16px;
+        font-size: clamp(29px, 8.2vw, 36px);
+        line-height: 1.08;
       }
 
       .hero p {
-        margin-bottom: 26px;
-        font-size: 16px;
+        margin-bottom: 22px;
+        font-size: 15px;
+        line-height: 1.6;
       }
 
       .hero-buttons,
@@ -1525,19 +1529,22 @@
       .btn {
         width: 100%;
         min-width: 0;
+        min-height: 48px;
+        padding: 14px 18px;
+        font-size: 14px;
       }
 
       .hero-facts {
         grid-template-columns: 1fr;
-        margin-top: 28px;
+        margin-top: 22px;
       }
 
       .hero-facts div {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 14px;
-        padding: 14px 16px;
+        gap: 12px;
+        padding: 12px 14px;
       }
 
       .hero-facts strong {
@@ -1549,6 +1556,23 @@
       .reviews-grid,
       .steps-grid {
         grid-template-columns: 1fr;
+      }
+
+      [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+
+      .service-card:hover,
+      .step:hover,
+      .advantage:hover,
+      .review-card:hover,
+      .gallery-grid figure:hover img,
+      .phone-btn:hover,
+      .btn:hover,
+      .mobile-menu-cta:hover {
+        transform: none;
       }
 
       .section-head {
@@ -1565,9 +1589,9 @@
 
       .advantage-icon,
       .service-icon {
-        width: 56px;
-        height: 56px;
-        font-size: 23px;
+        width: 52px;
+        height: 52px;
+        font-size: 21px;
       }
 
       .call-btn {
@@ -1601,11 +1625,12 @@
 
     @media (max-width: 420px) {
       .container {
-        width: min(100% - 28px, 1200px);
+        width: min(100% - 24px, 1200px);
       }
 
       .logo-text {
-        max-width: 145px;
+        max-width: 180px;
+        font-size: 17px;
       }
 
       .burger {
@@ -1614,7 +1639,7 @@
       }
 
       .hero h1 {
-        font-size: clamp(32px, 10.5vw, 40px);
+        font-size: clamp(27px, 8.4vw, 33px);
       }
 
       .advantage {
